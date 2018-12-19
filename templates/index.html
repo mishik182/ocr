@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block send_form %}
+    <form id='sendform' method='post' enctype='multipart/form-data'>
+        {% csrf_token %}
+        <p>
+            <label for='image_uploads'>Choose images to upload (PNG, JPG, JPEG) 2Mb max</label>
+            <input id="imgid" name='img' type='file' accept='.png, .jpg, .jpeg'>
+            <br />
+            <br />
+            <input id='sendbutton' class='button' type='submit' />
+            <input type="radio" name="lang" value="eng" checked /> ENG
+            <input type="radio" name="lang" value="rus" /> RUS
+        </p>
+    </form>
+    <br />
+{% endblock %}
+
+{% block js %}
+    <script>
+        // Check file size and file type
+        $('#imgid').bind('change', function() {
+            if (this.files[0].size > 2097152) {
+                alert('File size is to big!')
+                location.reload()
+            } else {
+                var ext = $('#imgid').val().split('.').pop().toLowerCase()
+                if ($.inArray(ext, ['png', 'jpg', 'jpeg', 'pdf']) == -1) {
+                    alert('The file type is invalid!')
+                    location.reload()
+                }
+            }
+        })
+
+        //Check for empty choosen
+        $('#sendbutton').click(function() {
+            if ($('#imgid').val()) {
+                $('div').hide()
+            } else {
+                alert('Choose a file!')
+                location.reload()
+            }
+        })
+    </script>
+{% endblock %}
